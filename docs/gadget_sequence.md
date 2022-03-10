@@ -16,9 +16,14 @@ sequenceDiagram
     c->>c: open /gadgets/new.html
     c->>c: input forms and click on 'Register'
     c->>s: POST /gadgets
-    s->>d: insert new gadget data
-    s->>c: 200
-    c->>c: open /gadgets/index.html
+    alt success
+        s->>d: insert new gadget data
+        s->>c: 200
+        c->>c: open /gadgets/index.html
+    else error
+        s->>c:400
+        Note over c, s: error_message: Gadget Registration Error
+    end
 ```
 
 
@@ -39,9 +44,14 @@ sequenceDiagram
     s->>c: gadget data
     c->>c: input forms and click on 'Edit'
     c->>s: PATCH /gadgets/{id}
-    s->>d: patch gadget data
-    s->>c: 200
-    c->>c: show success message
+    alt success
+        s->>d: patch gadget data
+        s->>c: 200
+        c->>c: show success message
+    else error
+        s->>c:400
+        Note over c, s: error_message: Gadget Edit Error
+    end
 ```
 
 
@@ -58,7 +68,12 @@ sequenceDiagram
     c->>c: click on 'Delete'
     c->>c: click on 'Assert Delete'
     c->>s: DELETE /gadgets/{id}
-    s->>d: delete gadget data
-    s->>c: 200
-    c->>c: show success message
+    alt success
+        s->>d: delete gadget data
+        s->>c: 200
+        c->>c: show success message
+    else error
+        s->>c:400
+        Note over c, s: error_message: Gadget Delete Error
+    end
 ```
