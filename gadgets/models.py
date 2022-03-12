@@ -1,3 +1,4 @@
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -27,4 +28,11 @@ class Purchase(models.Model):
     date = models.DateField()
     price_ati = models.IntegerField(default=0)
     shop = models.CharField(max_length=255, null=True)
+    gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)
+
+
+class Gift(models.Model):
+    date = models.DateField()
+    sender = models.CharField(max_length=255)
+    reason = models.CharField(max_length=255)
     gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)

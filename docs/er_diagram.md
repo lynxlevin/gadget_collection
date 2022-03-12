@@ -34,11 +34,11 @@ erDiagram
         bigint_20 gadget_id FK
     }
     GIFT {
-        int id PK
-        datetime date
-        varchar sender
-        varchar reason
-        int gadget_id FK
+        bigint_20 id PK
+        date date
+        varchar_255 sender
+        varchar_255 reason
+        bigint_20 gadget_id FK
     }
     CATALOGUE {
         int id PK
