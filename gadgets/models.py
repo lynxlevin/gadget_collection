@@ -19,6 +19,8 @@ class Gadget(models.Model):
     )
     free_form = models.TextField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
@@ -29,6 +31,8 @@ class Purchase(models.Model):
     price_ati = models.IntegerField(default=0)
     shop = models.CharField(max_length=255, null=True)
     gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Gift(models.Model):
@@ -36,8 +40,12 @@ class Gift(models.Model):
     sender = models.CharField(max_length=255)
     reason = models.CharField(max_length=255)
     gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 
 class Catalogue(models.Model):
     url = models.URLField()
     gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

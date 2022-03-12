@@ -25,6 +25,8 @@ erDiagram
         varchar_2 aquisition_type "enum: PURCHASE, GIFT"
         longtext free_form "nullable"
         int_11 user_id FK
+        datetime_6 created_at
+        datetime_6 updated_at
     }
     PURCHASE {
         bigint_20 id PK
@@ -32,6 +34,8 @@ erDiagram
         int_11 price_ati
         varchar_255 shop "nullable"
         bigint_20 gadget_id FK
+        datetime_6 created_at
+        datetime_6 updated_at
     }
     GIFT {
         bigint_20 id PK
@@ -39,11 +43,15 @@ erDiagram
         varchar_255 sender
         varchar_255 reason
         bigint_20 gadget_id FK
+        datetime_6 created_at
+        datetime_6 updated_at
     }
     CATALOGUE {
         bigint_20 id PK
         varchar_200 url
         bigint_20 gadget_id FK
+        datetime_6 created_at
+        datetime_6 updated_at
     }
 
 ```
