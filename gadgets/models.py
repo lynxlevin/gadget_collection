@@ -21,3 +21,10 @@ class Gadget(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Purchase(models.Model):
+    date = models.DateField()
+    price_ati = models.IntegerField(default=0)
+    shop = models.CharField(max_length=255, null=True)
+    gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)

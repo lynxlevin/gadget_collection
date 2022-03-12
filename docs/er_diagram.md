@@ -18,20 +18,20 @@ erDiagram
     GADGET ||--o| GIFT : ""
     GADGET ||--o{ CATALOGUE : ""
     GADGET {
-        int id PK
-        varchar name
-        varchar model "nullable"
-        varchar brand "nullable"
-        enum aquisition_type
-        varchar free_form "nullable"
-        int user_id FK
+        bigint_20 id PK
+        varchar_255 name
+        varchar_255 model "nullable"
+        varchar_255 brand "nullable"
+        varchar_2 aquisition_type "enum: PURCHASE, GIFT"
+        longtext free_form "nullable"
+        int_11 user_id FK
     }
     PURCHASE {
-        int id PK
-        datetime date
-        int price_ati
-        varchar shop "nullable"
-        int gadget_id FK
+        bigint_20 id PK
+        date date
+        int_11 price_ati
+        varchar_255 shop "nullable"
+        bigint_20 gadget_id FK
     }
     GIFT {
         int id PK
