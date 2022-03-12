@@ -41,9 +41,9 @@ erDiagram
         bigint_20 gadget_id FK
     }
     CATALOGUE {
-        int id PK
-        varchar url
-        int gadget_id FK
+        bigint_20 id PK
+        varchar_200 url
+        bigint_20 gadget_id FK
     }
 
 ```

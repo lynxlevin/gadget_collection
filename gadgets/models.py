@@ -36,3 +36,8 @@ class Gift(models.Model):
     sender = models.CharField(max_length=255)
     reason = models.CharField(max_length=255)
     gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)
+
+
+class Catalogue(models.Model):
+    url = models.URLField()
+    gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)
