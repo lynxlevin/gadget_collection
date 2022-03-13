@@ -22,7 +22,7 @@ erDiagram
         varchar_255 name
         varchar_255 model "nullable"
         varchar_255 brand "nullable"
-        varchar_2 aquisition_type "enum: PURCHASE, GIFT"
+        varchar_2 acquisition_type "enum: PURCHASE, GIFT"
         longtext free_form "nullable"
         int_11 user_id FK
         datetime_6 created_at

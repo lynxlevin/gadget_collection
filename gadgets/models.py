@@ -5,17 +5,17 @@ from django.contrib.auth.models import User
 
 class Gadget(models.Model):
 
-    class AquisitionType(models.TextChoices):
+    class AcquisitionType(models.TextChoices):
         PURCHASE = 'PC', 'Purchase'
         GIFT = 'GF', 'Gift'
 
     name = models.CharField(max_length=255)
     model = models.CharField(max_length=255, null=True)
     brand = models.CharField(max_length=255, null=True)
-    aquisition_type = models.CharField(
+    acquisition_type = models.CharField(
         max_length=2,
-        choices=AquisitionType.choices,
-        default=AquisitionType.PURCHASE
+        choices=AcquisitionType.choices,
+        default=AcquisitionType.PURCHASE
     )
     free_form = models.TextField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -24,6 +24,12 @@ class Gadget(models.Model):
 
     def __str__(self):
         return self.name
+
+    def acquisition(self):
+        if self.acquisition_type == 'PC':
+            return self.purchase
+        else:
+            return self.gift
 
 
 class Purchase(models.Model):

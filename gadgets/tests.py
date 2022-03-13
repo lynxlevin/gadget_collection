@@ -56,9 +56,9 @@ class GadgetModelTests(TestCase):
         self.assertEqual(gadget.name, 'test')
         self.assertEqual(gadget.model, None)
         self.assertEqual(gadget.brand, None)
-        self.assertEqual(gadget.aquisition_type.value, 'PC')
-        self.assertEqual(gadget.aquisition_type.name, 'PURCHASE')
-        self.assertEqual(gadget.aquisition_type.label, 'Purchase')
+        self.assertEqual(gadget.acquisition_type.value, 'PC')
+        self.assertEqual(gadget.acquisition_type.name, 'PURCHASE')
+        self.assertEqual(gadget.acquisition_type.label, 'Purchase')
         self.assertEqual(gadget.free_form, None)
         self.assertEqual(gadget.user, user)
         self.assertEqual(gadget.created_at, mock_date)
@@ -79,6 +79,22 @@ class GadgetModelTests(TestCase):
 
         self.assertEqual(gadget.created_at, mock_date)
         self.assertEqual(gadget.updated_at, mock_update_date)
+
+    def test_acquisition_returns_purchase(self):
+        user = create_valid_user()
+        gadget = create_default_gadget(user)
+        purchase = create_default_purchase(gadget)
+        result = gadget.acquisition()
+        self.assertEqual(result, purchase)
+
+    def test_acquisition_returns_gift(self):
+        user = create_valid_user()
+        gadget = create_default_gadget(user)
+        gadget.acquisition_type = 'GF'
+        gadget.save()
+        gift = create_default_gift(gadget)
+        result = gadget.acquisition()
+        self.assertEqual(result, gift)
 
 
 class PurchaseModelTests(TestCase):
