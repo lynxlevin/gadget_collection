@@ -4,7 +4,7 @@ from unittest import mock
 from django.test import TestCase
 from django.contrib.auth.models import User
 
-from gadgets.models import Gadget, Purchase
+from gadgets.models import Gadget, Gift, Purchase
 
 
 def create_valid_user():
@@ -33,6 +33,16 @@ def create_default_purchase(gadget):
     purchase.gadget = gadget
     purchase.save()
     return purchase
+
+
+def create_default_gift(gadget):
+    gift = Gift()
+    gift.date = date(2022, 3, 11)
+    gift.sender = 'Fred'
+    gift.reason = 'Birthday Present'
+    gift.gadget = gadget
+    gift.save()
+    return gift
 
 
 class GadgetModelTests(TestCase):
@@ -102,3 +112,37 @@ class PurchaseModelTests(TestCase):
 
         self.assertEqual(purchase.created_at, mock_date)
         self.assertEqual(purchase.updated_at, mock_update_date)
+
+
+class GiftModelTests(TestCase):
+    def test_default_values(self):
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        with mock.patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = mock_date
+            user = create_valid_user()
+            gadget = create_default_gadget(user)
+            gift = create_default_gift(gadget)
+
+        self.assertEqual(gift.date, date(2022, 3, 11))
+        self.assertEqual(gift.sender, 'Fred')
+        self.assertEqual(gift.reason, 'Birthday Present')
+        self.assertEqual(gift.gadget, gadget)
+        self.assertEqual(gift.created_at, mock_date)
+        self.assertEqual(gift.updated_at, mock_date)
+
+    def test_updated_at(self):
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        with mock.patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = mock_date
+            user = create_valid_user()
+            gadget = create_default_gadget(user)
+            gift = create_default_gift(gadget)
+
+        mock_update_date = datetime(2022, 3, 13, 11, 38, 10, 0)
+        with mock.patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = mock_update_date
+            gift.price_ati = 11000
+            gift.save()
+
+        self.assertEqual(gift.created_at, mock_date)
+        self.assertEqual(gift.updated_at, mock_update_date)
