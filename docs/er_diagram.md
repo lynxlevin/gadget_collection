@@ -29,20 +29,18 @@ erDiagram
         datetime_6 updated_at
     }
     PURCHASE {
-        bigint_20 id PK
         date date
         int_11 price_ati
         varchar_255 shop "nullable"
-        bigint_20 gadget_id FK
+        bigint_20 gadget_id PK
         datetime_6 created_at
         datetime_6 updated_at
     }
     GIFT {
-        bigint_20 id PK
         date date
         varchar_255 sender
         varchar_255 reason
-        bigint_20 gadget_id FK
+        bigint_20 gadget_id PK
         datetime_6 created_at
         datetime_6 updated_at
     }

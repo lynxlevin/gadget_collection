@@ -30,7 +30,8 @@ class Purchase(models.Model):
     date = models.DateField()
     price_ati = models.IntegerField(default=0)
     shop = models.CharField(max_length=255, null=True)
-    gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)
+    gadget = models.OneToOneField(
+        Gadget, on_delete=models.CASCADE, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -39,7 +40,8 @@ class Gift(models.Model):
     date = models.DateField()
     sender = models.CharField(max_length=255)
     reason = models.CharField(max_length=255)
-    gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)
+    gadget = models.OneToOneField(
+        Gadget, on_delete=models.CASCADE, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
