@@ -1,9 +1,10 @@
 from datetime import datetime
+from datetime import date
 from unittest import mock
 from django.test import TestCase
 from django.contrib.auth.models import User
 
-from gadgets.models import Gadget
+from gadgets.models import Gadget, Purchase
 
 
 def create_valid_user():
@@ -25,7 +26,16 @@ def create_default_gadget(user):
     return gadget
 
 
-class GadgetTests(TestCase):
+def create_default_purchase(gadget):
+    purchase = Purchase()
+    purchase.date = date(2022, 3, 11)
+    purchase.price_ati = 10000
+    purchase.gadget = gadget
+    purchase.save()
+    return purchase
+
+
+class GadgetModelTests(TestCase):
     def test_default_values(self):
         mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
         with mock.patch('django.utils.timezone.now') as mock_now:
@@ -50,6 +60,7 @@ class GadgetTests(TestCase):
             mock_now.return_value = mock_date
             user = create_valid_user()
             gadget = create_default_gadget(user)
+
         mock_update_date = datetime(2022, 3, 13, 11, 38, 10, 0)
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_update_date
@@ -58,4 +69,36 @@ class GadgetTests(TestCase):
 
         self.assertEqual(gadget.created_at, mock_date)
         self.assertEqual(gadget.updated_at, mock_update_date)
-        self.assertEqual(gadget.updated_at.strftime("%Y-%m-%d"), '2022-03-13')
+
+
+class PurchaseModelTests(TestCase):
+    def test_default_values(self):
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        with mock.patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = mock_date
+            user = create_valid_user()
+            gadget = create_default_gadget(user)
+            purchase = create_default_purchase(gadget)
+
+        self.assertEqual(purchase.date, date(2022, 3, 11))
+        self.assertEqual(purchase.price_ati, 10000)
+        self.assertEqual(purchase.gadget, gadget)
+        self.assertEqual(purchase.created_at, mock_date)
+        self.assertEqual(purchase.updated_at, mock_date)
+
+    def test_updated_at(self):
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        with mock.patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = mock_date
+            user = create_valid_user()
+            gadget = create_default_gadget(user)
+            purchase = create_default_purchase(gadget)
+
+        mock_update_date = datetime(2022, 3, 13, 11, 38, 10, 0)
+        with mock.patch('django.utils.timezone.now') as mock_now:
+            mock_now.return_value = mock_update_date
+            purchase.price_ati = 11000
+            purchase.save()
+
+        self.assertEqual(purchase.created_at, mock_date)
+        self.assertEqual(purchase.updated_at, mock_update_date)
