@@ -67,3 +67,11 @@ class Catalogue(models.Model):
     gadget = models.ForeignKey(Gadget, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class CustomUser(User):
+    class Meta:
+        proxy = True
+
+    def get_gadgets_with_relations(self):
+        return Gadget.objects.select_related().filter(user=self)

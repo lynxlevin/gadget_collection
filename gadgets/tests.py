@@ -2,14 +2,13 @@ from datetime import datetime
 from datetime import date
 from unittest import mock
 from django.test import TestCase
-from django.contrib.auth.models import User
 
-from gadgets.models import Gadget, Gift, Purchase
+from gadgets.models import Gadget, Gift, Purchase, CustomUser
 
 
 def create_valid_user():
-    user = User()
-    user_count = User.objects.count()
+    user = CustomUser()
+    user_count = CustomUser.objects.count()
     user.username = 'test_user' + str(user_count)
     user.first_name = 'test'
     user.last_name = 'user'
@@ -178,3 +177,19 @@ class GiftModelTests(TestCase):
 
         self.assertEqual(gadget.acquisition_type, 'GF')
         self.assertNotEqual(gadget.created_at, gadget.updated_at)
+
+
+class UserModelTests(TestCase):
+    def test_get_gadgets_with_relations(self):
+        user = create_valid_user()
+        gadget1_1 = create_default_gadget(user)
+        purchase1_1 = create_default_purchase(gadget1_1)
+        gadget1_2 = create_default_gadget(user)
+        purchase1_2 = create_default_purchase(gadget1_2)
+
+        result = user.get_gadgets_with_relations()
+        self.assertEqual(result[0], gadget1_1)
+        self.assertEqual(result[0].purchase, purchase1_1)
+        self.assertEqual(result[1], gadget1_2)
+        self.assertEqual(result[1].purchase, purchase1_2)
+        self.assertEqual(result.count(), 2)
