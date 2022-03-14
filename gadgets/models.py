@@ -41,6 +41,11 @@ class Purchase(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        self.gadget.acquisition_type = 'PC'
+        self.gadget.save()
+        super().save(*args, **kwargs)
+
 
 class Gift(models.Model):
     date = models.DateField()
@@ -50,6 +55,11 @@ class Gift(models.Model):
         Gadget, on_delete=models.CASCADE, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.gadget.acquisition_type = 'GF'
+        self.gadget.save()
+        super().save(*args, **kwargs)
 
 
 class Catalogue(models.Model):

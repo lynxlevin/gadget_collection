@@ -129,6 +129,14 @@ class PurchaseModelTests(TestCase):
         self.assertEqual(purchase.created_at, mock_date)
         self.assertEqual(purchase.updated_at, mock_update_date)
 
+    def test_gadget_acquisition_updated_on_save_purchase(self):
+        user = create_valid_user()
+        gadget = create_default_gadget(user)
+        create_default_purchase(gadget)
+
+        self.assertEqual(gadget.acquisition_type, 'PC')
+        self.assertNotEqual(gadget.created_at, gadget.updated_at)
+
 
 class GiftModelTests(TestCase):
     def test_default_values(self):
@@ -162,3 +170,11 @@ class GiftModelTests(TestCase):
 
         self.assertEqual(gift.created_at, mock_date)
         self.assertEqual(gift.updated_at, mock_update_date)
+
+    def test_gadget_acquisition_updated_on_save_gift(self):
+        user = create_valid_user()
+        gadget = create_default_gadget(user)
+        create_default_gift(gadget)
+
+        self.assertEqual(gadget.acquisition_type, 'GF')
+        self.assertNotEqual(gadget.created_at, gadget.updated_at)
