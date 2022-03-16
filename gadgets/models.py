@@ -46,6 +46,15 @@ class Purchase(models.Model):
         self.gadget.save()
         super().save(*args, **kwargs)
 
+    def param1(self):
+        return self.date
+
+    def param2(self):
+        return self.price_ati
+
+    def param3(self):
+        return self.shop
+
 
 class Gift(models.Model):
     date = models.DateField()
@@ -60,6 +69,15 @@ class Gift(models.Model):
         self.gadget.acquisition_type = 'GF'
         self.gadget.save()
         super().save(*args, **kwargs)
+
+    def param1(self):
+        return self.date
+
+    def param2(self):
+        return self.sender
+
+    def param3(self):
+        return self.reason
 
 
 class Catalogue(models.Model):
