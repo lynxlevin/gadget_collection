@@ -1,0 +1,14 @@
+{% extends 'gadgets/base.html' %}
+{% block content %}
+{% if gadget_list %}
+<ul>
+  {% for gadget in gadget_list %}
+  <li>
+    {{gadget.id}}: {{gadget.name}}: {{gadget.model}}: {{gadget.brand}}: {{gadget.acquisition_type}}: {{gadget.free_form}}: {{gadget.acquisition.date}}:
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No gadgets are available.</p>
+{% endif %}
+{% endblock %}
