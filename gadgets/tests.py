@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from datetime import date
 from unittest import mock
 from django.test import TestCase
@@ -44,9 +44,13 @@ def create_default_gift(gadget):
     return gift
 
 
+def timezone_utc():
+    return timezone(timedelta(), 'UTC')
+
+
 class GadgetModelTests(TestCase):
     def test_default_values(self):
-        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0, timezone_utc())
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_date
             user = create_valid_user()
@@ -64,13 +68,13 @@ class GadgetModelTests(TestCase):
         self.assertEqual(gadget.updated_at, mock_date)
 
     def test_updated_at(self):
-        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0, timezone_utc())
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_date
             user = create_valid_user()
             gadget = create_default_gadget(user)
 
-        mock_update_date = datetime(2022, 3, 13, 11, 38, 10, 0)
+        mock_update_date = datetime(2022, 3, 13, 11, 38, 10, 0, timezone_utc())
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_update_date
             gadget.name = 'test2'
@@ -98,7 +102,7 @@ class GadgetModelTests(TestCase):
 
 class PurchaseModelTests(TestCase):
     def test_default_values(self):
-        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0, timezone_utc())
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_date
             user = create_valid_user()
@@ -112,14 +116,14 @@ class PurchaseModelTests(TestCase):
         self.assertEqual(purchase.updated_at, mock_date)
 
     def test_updated_at(self):
-        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0, timezone_utc())
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_date
             user = create_valid_user()
             gadget = create_default_gadget(user)
             purchase = create_default_purchase(gadget)
 
-        mock_update_date = datetime(2022, 3, 13, 11, 38, 10, 0)
+        mock_update_date = datetime(2022, 3, 13, 11, 38, 10, 0, timezone_utc())
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_update_date
             purchase.price_ati = 11000
@@ -139,7 +143,7 @@ class PurchaseModelTests(TestCase):
 
 class GiftModelTests(TestCase):
     def test_default_values(self):
-        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0, timezone_utc())
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_date
             user = create_valid_user()
@@ -154,14 +158,14 @@ class GiftModelTests(TestCase):
         self.assertEqual(gift.updated_at, mock_date)
 
     def test_updated_at(self):
-        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0)
+        mock_date = datetime(2022, 3, 12, 11, 38, 10, 0, timezone_utc())
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_date
             user = create_valid_user()
             gadget = create_default_gadget(user)
             gift = create_default_gift(gadget)
 
-        mock_update_date = datetime(2022, 3, 13, 11, 38, 10, 0)
+        mock_update_date = datetime(2022, 3, 13, 11, 38, 10, 0, timezone_utc())
         with mock.patch('django.utils.timezone.now') as mock_now:
             mock_now.return_value = mock_update_date
             gift.price_ati = 11000
