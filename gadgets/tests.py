@@ -1,5 +1,4 @@
-from datetime import datetime, timedelta, timezone
-from datetime import date
+from datetime import datetime, timedelta, timezone, date
 from unittest import mock
 from django.test import TestCase
 
@@ -200,7 +199,7 @@ class UserModelTests(TestCase):
 
 
 class CreateViewTests(TestCase):
-    def test_create_gadget(self):
+    def test_create_gadget_with_purchase(self):
         create_valid_user()
         gadget_form = {
             'name': 'test create view',
@@ -209,20 +208,22 @@ class CreateViewTests(TestCase):
             'free_form': 'free form',
             'acquisition_type': 'PC',
         }
-        response = self.client.post('/gadgets/new', gadget_form)
+        response = self.client.post('/gadgets/separate/new', gadget_form)
         self.assertEqual(Gadget.objects.last().name, 'test create view')
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/gadgets/separate/purchase')
 
-    def test_create_with_only_required_param(self):
+    def test_create_with_only_required_param_with_purchase(self):
         create_valid_user()
         gadget_form = {
             'name': 'test create view with only required param',
             'acquisition_type': 'PC',
         }
-        response = self.client.post('/gadgets/new', gadget_form)
+        response = self.client.post('/gadgets/separate/new', gadget_form)
         self.assertEqual(Gadget.objects.last().name,
                          'test create view with only required param')
         self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/gadgets/separate/purchase')
 
     def test_create_fails_without_required_params(self):
         create_valid_user()
@@ -231,8 +232,78 @@ class CreateViewTests(TestCase):
             'brand': 'create view',
             'free_form': 'free form',
         }
-        response = self.client.post('/gadgets/new', gadget_form)
+        response = self.client.post('/gadgets/separate/new', gadget_form)
         self.assertEqual(Gadget.objects.last(), None)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'This field is required')
+
+    def test_create_gadget_with_gift(self):
+        create_valid_user()
+        gadget_form = {
+            'name': 'test create view',
+            'model': 'test01',
+            'brand': 'create view',
+            'free_form': 'free form',
+            'acquisition_type': 'GF',
+        }
+        response = self.client.post('/gadgets/separate/new', gadget_form)
+        self.assertEqual(Gadget.objects.last().name, 'test create view')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/gadgets/separate/gift')
+
+    def test_create_with_only_required_param_with_gift(self):
+        create_valid_user()
+        gadget_form = {
+            'name': 'test create view with only required param',
+            'acquisition_type': 'GF',
+        }
+        response = self.client.post('/gadgets/separate/new', gadget_form)
+        self.assertEqual(Gadget.objects.last().name,
+                         'test create view with only required param')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/gadgets/separate/gift')
     # def test_authorized_user_is_used(self):
+
+
+class CreatePurchaseViewTests(TestCase):
+    def test_create_purchase(self):
+        user = create_valid_user()
+        gadget = create_default_gadget(user)
+        purchase_form = {
+            'date': '2022-03-29',
+            'price_ati': 1000,
+            'shop': 'test shop',
+            'gadget_id': gadget.id,
+        }
+        response = self.client.post(
+            '/gadgets/separate/purchase', purchase_form)
+        self.assertEqual(Purchase.objects.last().date, date(2022, 3, 29))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/gadgets/')
+
+    def test_create_with_only_required_params(self):
+        user = create_valid_user()
+        gadget = create_default_gadget(user)
+        purchase_form = {
+            'date': '2022-03-29',
+            'price_ati': 1000,
+            'gadget_id': gadget.id,
+        }
+        response = self.client.post(
+            '/gadgets/separate/purchase', purchase_form)
+        self.assertEqual(Purchase.objects.last().date, date(2022, 3, 29))
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/gadgets/')
+
+    def test_create_fails_without_required_params(self):
+        user = create_valid_user()
+        gadget = create_default_gadget(user)
+        purchase_form = {
+            'shop': 'test shop',
+            'gadget_id': gadget.id,
+        }
+        response = self.client.post(
+            '/gadgets/separate/purchase', purchase_form)
+        self.assertEqual(Purchase.objects.last(), None)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'This field is required')

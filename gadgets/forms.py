@@ -1,6 +1,6 @@
 from django import forms
 
-from gadgets.models import Gadget
+from gadgets.models import Gadget, Gift, Purchase
 
 
 class GadgetForm(forms.ModelForm):
@@ -14,3 +14,21 @@ class GadgetForm(forms.ModelForm):
     class Meta:
         model = Gadget
         fields = ['name', 'model', 'brand', 'free_form', 'acquisition_type']
+
+
+class PurchaseForm(forms.ModelForm):
+    date = forms.DateField()
+    price_ati = forms.NumberInput()
+    shop = forms.CharField(required=False)
+
+    class Meta:
+        model = Purchase
+        fields = ['date', 'price_ati', 'shop']
+
+
+class GiftForm(forms.ModelForm):
+    date = forms.DateField()
+
+    class Meta:
+        model = Gift
+        fields = ['date']
