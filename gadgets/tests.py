@@ -193,3 +193,40 @@ class UserModelTests(TestCase):
         self.assertEqual(result[1], gadget1_2)
         self.assertEqual(result[1].purchase, purchase1_2)
         self.assertEqual(result.count(), 2)
+
+
+class CreateViewTests(TestCase):
+    def test_create_gadget(self):
+        create_valid_user()
+        gadget_form = {
+            'name': 'test create view',
+            'model': 'test01',
+            'brand': 'create view',
+            'free_form': 'free form',
+        }
+        response = self.client.post('/gadgets/new', gadget_form)
+        self.assertEqual(Gadget.objects.last().name, 'test create view')
+        self.assertEqual(response.status_code, 302)
+
+    def test_create_with_only_required_param(self):
+        create_valid_user()
+        gadget_form = {
+            'name': 'test create view with only required param',
+        }
+        response = self.client.post('/gadgets/new', gadget_form)
+        self.assertEqual(Gadget.objects.last().name,
+                         'test create view with only required param')
+        self.assertEqual(response.status_code, 302)
+
+    def test_create_fails_without_required_params(self):
+        create_valid_user()
+        gadget_form = {
+            'model': 'test01',
+            'brand': 'create view',
+            'free_form': 'free form',
+        }
+        response = self.client.post('/gadgets/new', gadget_form)
+        self.assertEqual(Gadget.objects.last(), None)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'This field is required')
+    # def test_authorized_user_is_used(self):

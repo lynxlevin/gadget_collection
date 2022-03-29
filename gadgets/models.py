@@ -31,6 +31,12 @@ class Gadget(models.Model):
         else:
             return self.gift
 
+    # TODO: change so current user is used.
+    def save(self, **kwargs):
+        if not hasattr(self, 'user'):
+            self.user = User.objects.first()
+        super(Gadget, self).save(**kwargs)
+
 
 class Purchase(models.Model):
     date = models.DateField()
