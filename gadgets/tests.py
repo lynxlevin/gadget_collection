@@ -207,6 +207,7 @@ class CreateViewTests(TestCase):
             'model': 'test01',
             'brand': 'create view',
             'free_form': 'free form',
+            'acquisition_type': 'PC',
         }
         response = self.client.post('/gadgets/new', gadget_form)
         self.assertEqual(Gadget.objects.last().name, 'test create view')
@@ -216,6 +217,7 @@ class CreateViewTests(TestCase):
         create_valid_user()
         gadget_form = {
             'name': 'test create view with only required param',
+            'acquisition_type': 'PC',
         }
         response = self.client.post('/gadgets/new', gadget_form)
         self.assertEqual(Gadget.objects.last().name,
