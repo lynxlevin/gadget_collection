@@ -25,8 +25,6 @@ class PurchaseForm(forms.ModelForm):
 
 
 class GiftForm(forms.ModelForm):
-    date = forms.DateField()
-
     class Meta:
         model = Gift
-        fields = ['date']
+        fields = ['date', 'sender', 'reason', 'gadget']
