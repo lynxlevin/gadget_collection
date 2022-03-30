@@ -209,9 +209,11 @@ class CreateViewTests(TestCase):
             'acquisition_type': 'PC',
         }
         response = self.client.post('/gadgets/separate/new', gadget_form)
-        self.assertEqual(Gadget.objects.last().name, 'test create view')
+        gadget = Gadget.objects.last()
+        self.assertEqual(gadget.name, 'test create view')
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/gadgets/separate/purchase')
+        self.assertEqual(
+            response['location'], '/gadgets/separate/purchase?gadget=' + str(gadget.id))
 
     def test_create_with_only_required_param_with_purchase(self):
         create_valid_user()
@@ -220,10 +222,12 @@ class CreateViewTests(TestCase):
             'acquisition_type': 'PC',
         }
         response = self.client.post('/gadgets/separate/new', gadget_form)
-        self.assertEqual(Gadget.objects.last().name,
+        gadget = Gadget.objects.last()
+        self.assertEqual(gadget.name,
                          'test create view with only required param')
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/gadgets/separate/purchase')
+        self.assertEqual(
+            response['location'], '/gadgets/separate/purchase?gadget=' + str(gadget.id))
 
     def test_create_fails_without_required_params(self):
         create_valid_user()
@@ -273,10 +277,10 @@ class CreatePurchaseViewTests(TestCase):
             'date': '2022-03-29',
             'price_ati': 1000,
             'shop': 'test shop',
-            'gadget_id': gadget.id,
+            'gadget': gadget.id,
         }
         response = self.client.post(
-            '/gadgets/separate/purchase', purchase_form)
+            '/gadgets/separate/purchase?gadget=' + str(gadget.id), purchase_form)
         self.assertEqual(Purchase.objects.last().date, date(2022, 3, 29))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/gadgets/')
@@ -287,10 +291,10 @@ class CreatePurchaseViewTests(TestCase):
         purchase_form = {
             'date': '2022-03-29',
             'price_ati': 1000,
-            'gadget_id': gadget.id,
+            'gadget': gadget.id,
         }
         response = self.client.post(
-            '/gadgets/separate/purchase', purchase_form)
+            '/gadgets/separate/purchase?gadget=' + str(gadget.id), purchase_form)
         self.assertEqual(Purchase.objects.last().date, date(2022, 3, 29))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/gadgets/')
@@ -300,10 +304,10 @@ class CreatePurchaseViewTests(TestCase):
         gadget = create_default_gadget(user)
         purchase_form = {
             'shop': 'test shop',
-            'gadget_id': gadget.id,
+            'gadget': gadget.id,
         }
         response = self.client.post(
-            '/gadgets/separate/purchase', purchase_form)
+            '/gadgets/separate/purchase?gadget=' + str(gadget.id), purchase_form)
         self.assertEqual(Purchase.objects.last(), None)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'This field is required')

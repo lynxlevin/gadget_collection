@@ -20,11 +20,10 @@ class CreateView(generic.edit.CreateView):
     template_name = 'gadgets/create.html'
     model = Gadget
     form_class = GadgetForm
-    # success_url = reverse_lazy('gadgets:new_purchase')
 
     def get_success_url(self):
         if self.request.POST['acquisition_type'] == 'PC':
-            return reverse_lazy('gadgets:new_purchase')
+            return reverse_lazy('gadgets:new_purchase') + '?gadget=' + str(self.object.id)
         else:
             return reverse_lazy('gadgets:new_gift')
 
@@ -35,9 +34,10 @@ class CreatePurchaseView(generic.edit.CreateView):
     form_class = PurchaseForm
     success_url = reverse_lazy('gadgets:index')
 
-    def form_valid(self, form):
-        form.instance.gadget_id = self.request.POST['gadget_id']
-        return super().form_valid(form)
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['gadget'] = self.request.GET['gadget']
+        return initial
 
 
 class CreateGiftView(generic.edit.CreateView):

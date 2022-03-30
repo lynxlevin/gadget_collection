@@ -17,13 +17,11 @@ class GadgetForm(forms.ModelForm):
 
 
 class PurchaseForm(forms.ModelForm):
-    date = forms.DateField()
-    price_ati = forms.NumberInput()
     shop = forms.CharField(required=False)
 
     class Meta:
         model = Purchase
-        fields = ['date', 'price_ati', 'shop']
+        fields = ['date', 'price_ati', 'shop', 'gadget']
 
 
 class GiftForm(forms.ModelForm):
